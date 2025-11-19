@@ -1,10 +1,20 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthMiddleware } from './auth.middleware';
 
 @Module({
   imports: [],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude(
+        { path: 'redirect/:code', method: RequestMethod.GET }, // liberar endpoint público
+      )
+      .forRoutes('*'); // aplica para todas as outras rotas
+  }
+}
