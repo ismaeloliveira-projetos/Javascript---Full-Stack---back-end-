@@ -15,8 +15,11 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return backend running message', () => {
+      const result = appController.getRoot();
+      expect(result).toEqual({
+        message: '🚀 Backend rodando! API pronta para receber requisições.',
+      });
     });
   });
 });
