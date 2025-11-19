@@ -1,17 +1,11 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Res,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Response } from 'express';
 
 @Controller()
 export class AppController {
+  getHello(): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly appService: AppService) {}
 
   @Get('urls')
@@ -24,15 +18,10 @@ export class AppController {
     return this.appService.shortenUrl(url);
   }
 
-  @Get(':code')
-  async redirect(@Param('code') code: string, @Res() res: Response) {
-    try {
-      const originalUrl = await this.appService.getOriginalUrl(code);
-      return res.redirect(HttpStatus.FOUND, originalUrl);
-    } catch (error) {
-      return res
-        .status(HttpStatus.NOT_FOUND)
-        .json({ message: 'URL not found' });
-    }
+  // Endpoint que incrementa clicks e retorna originalUrl
+  @Get('redirect/:code')
+  async redirect(@Param('code') code: string) {
+    const originalUrl = await this.appService.redirectAndCount(code);
+    return { originalUrl };
   }
 }
