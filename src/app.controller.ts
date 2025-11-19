@@ -3,15 +3,10 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  // Rota raiz para verificar se o servidor está rodando
-  @Get()
-  getRoot() {
-    return {
-      message: '🚀 Backend rodando! API pronta para receber requisições.',
-    };
+  getHello(): any {
+    throw new Error('Method not implemented.');
   }
+  constructor(private readonly appService: AppService) {}
 
   @Get('urls')
   async getUrls() {
