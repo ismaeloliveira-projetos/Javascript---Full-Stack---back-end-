@@ -1,98 +1,103 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+📘 Encurtador de URL – Backend (NestJS + Prisma + PostgreSQL)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este é o backend do sistema de encurtamento de URLs, desenvolvido em NestJS, usando Prisma ORM, PostgreSQL (Neon) e deploy em Render.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+🚀 Funcionalidades
 
-## Description
+Encurtar URLs
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Redirecionamento automático
 
-## Project setup
+Persistência via PostgreSQL
 
-```bash
-$ npm install
-```
+API Key para proteção de endpoints
 
-## Compile and run the project
+Tratamento global de exceções
 
-```bash
-# development
-$ npm run start
+Middleware de autenticação
 
-# watch mode
-$ npm run start:dev
+Testes end-to-end com Jest
 
-# production mode
-$ npm run start:prod
-```
+<img width="671" height="639" alt="Captura de tela 2025-11-24 105050" src="https://github.com/user-attachments/assets/99fc0db6-9690-4b32-9236-2e0ef684a1f3" />
 
-## Run tests
+⚙️ Instalação
+1️⃣ Instalar dependências
+npm install
 
-```bash
-# unit tests
-$ npm run test
+🔧 Variáveis de Ambiente (reais)
 
-# e2e tests
-$ npm run test:e2e
+Crie um arquivo .env na raiz com:
 
-# test coverage
-$ npm run test:cov
-```
+DATABASE_URL="postgresql://neondb_owner:npg_3xUM9dNJOlco@ep-holy-glitter-acpofl9l-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require"
 
-## Deployment
+BASE_URL=https://shortener-backend-7qu0.onrender.com
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+API_KEY=f47ac10b-58cc-4372-a567-0e02b2c3d479
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+🗄️ Banco de Dados
+Aplicar migrations:
+npx prisma migrate deploy
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+ou em desenvolvimento:
 
-## Resources
+npx prisma migrate dev
 
-Check out a few resources that may come in handy when working with NestJS:
+Acessar o prisma studio:
+npx prisma studio
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## Support
+Banco utilizado: PostgreSQL (Neon)
+Conexão já configurada via DATABASE_URL.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+▶️ Rodar a aplicação
+Desenvolvimento
+npm run start:dev
 
-## Stay in touch
+Produção
+npm run start
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+A API roda por padrão em:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+http://localhost:1000
+
+🧪 Testes (E2E)
+npm run test:e2e
+
+🔐 Autenticação (API Key)
+
+Alguns endpoints utilizam API Key.
+
+Enviar no header:
+
+x-api-key: f47ac10b-58cc-4372-a567-0e02b2c3d479
+
+🌐 URL de Produção
+
+A API está online em:
+
+https://shortener-backend-7qu0.onrender.com
+
+📌 Rotas Principais
+Criar URL encurtada
+
+POST /shorten
+
+Body:
+
+{
+  "originalUrl": "https://google.com"
+}
+
+Redirecionar (público)
+
+GET /:code
+
+🧱 Scripts úteis
+Comando	Descrição
+npm run start	Inicia a aplicação
+npm run start:dev	Modo desenvolvimento
+npm run build	Compila o projeto
+npm run test:e2e	Testes end-to-end
+npm run lint	Analisa código
