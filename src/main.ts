@@ -6,27 +6,31 @@ import 'dotenv/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // 🔥 Validação global (OBRIGATÓRIO para class-validator funcionar)
+  // 🔥 Validação global
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // remove campos extras
+      whitelist: true,
       forbidNonWhitelisted: false,
-      transform: true, // transforma payload em DTO automaticamente
+      transform: true,
     }),
   );
 
-  // 🔓 CORS
+  // 🔓 CORS —
   app.enableCors({
-    origin: '*',
-    methods: 'GET,POST,PUT,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Authorization',
-    credentials: true,
+    origin: [
+      'http://localhost:3000',
+      'https://javascript-full-stack-front-end.vercel.app',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: false,
   });
 
   const PORT = process.env.PORT || 3001;
 
-  await app.listen(PORT);
-  console.log(`🚀 Backend rodando em http://localhost:${PORT}`);
+  await app.listen(PORT, () => {
+    console.log(`🚀 Backend rodando na porta ${PORT}`);
+  });
 }
 
 bootstrap();
