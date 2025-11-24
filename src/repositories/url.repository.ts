@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { Prisma } from '@prisma/client'; // apenas para tipos
+import { Url } from '@prisma/client'; // ✅ Import direto do client, não do Prisma namespace
 
 @Injectable()
 export class UrlRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(): Promise<Prisma.Url[]> {
+  async findAll(): Promise<Url[]> {
     return this.prisma.url.findMany({ orderBy: { createdAt: 'desc' } });
   }
 
-  async findByShortCode(shortCode: string): Promise<Prisma.Url | null> {
+  async findByShortCode(shortCode: string): Promise<Url | null> {
     return this.prisma.url.findUnique({ where: { shortCode } });
   }
 
@@ -18,7 +18,7 @@ export class UrlRepository {
     originalUrl: string;
     shortCode: string;
     expiresAt?: Date;
-  }): Promise<Prisma.Url> {
+  }): Promise<Url> {
     return this.prisma.url.create({ data });
   }
 
