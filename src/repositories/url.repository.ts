@@ -14,8 +14,18 @@ export class UrlRepository {
     return this.prisma.url.findUnique({ where: { shortCode } });
   }
 
-  async create(data: Partial<Url>): Promise<Url> {
-    return this.prisma.url.create({ data });
+  /**
+   * Cria uma nova URL encurtada.
+   * Aceita apenas os campos permitidos pelo Prisma: originalUrl, shortCode, expiresAt (opcional).
+   */
+  async create({ originalUrl, shortCode, expiresAt }: { originalUrl: string; shortCode: string; expiresAt?: Date }): Promise<Url> {
+    return this.prisma.url.create({
+      data: {
+        originalUrl,
+        shortCode,
+        ...(expiresAt ? { expiresAt } : {}),
+      },
+    });
   }
 
   async incrementClicks(id: number): Promise<void> {

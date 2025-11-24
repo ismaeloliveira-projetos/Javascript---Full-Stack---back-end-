@@ -38,10 +38,11 @@ export class AppService {
     // Exemplo: adicionar expiração de 30 dias (opcional)
     // const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
+    // Envia apenas os campos permitidos
     const created = await this.urlRepository.create({
       originalUrl,
       shortCode,
-      // expiresAt, // descomente se adicionar no schema
+      // expiresAt, // descomente se quiser usar expiração
     });
     return created;
   }
