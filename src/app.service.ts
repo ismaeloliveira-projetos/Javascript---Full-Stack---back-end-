@@ -3,7 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { randomBytes } from 'crypto';
+import { nanoid } from 'nanoid';
 import { UrlRepository } from './repositories/url.repository';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class AppService {
   }
 
   // Cria e mantém uma URL encurtada
-  async shortenUrl(originalUrl: string) {
+  async shortenUrl(originalUrl: string, customShortCode?: string) {
     // Validação básica: exigir protocolo http/https
     if (!originalUrl || !/^(https?:\/\/)/i.test(originalUrl)) {
       throw new BadRequestException(
@@ -24,44 +24,49 @@ export class AppService {
       );
     }
 
-    // Garante unicidade do shortCode
     let shortCode: string;
     let exists = true;
     let tentativas = 0;
+
     do {
-      shortCode = randomBytes(3).toString('hex');
-      exists = await this.urlRepository.existsShortCode(shortCode);
-      tentativas++;
-      if (tentativas > 5) throw new BadRequestException('Não foi possível gerar um código único. Tente novamente.');
-    } while (exists);
+      if (customShortCode) {
+        shortCode = customShortCode;
+        exists = await this.urlRepository.existsShortCode(shortCode);
+        if (exists)
+          throw new BadRequestException('Este código personalizado já existe.');
+      } else {
+        shortCode = nanoid(5); // gera 5 caracteres Base62
+        exists = await this.urlRepository.existsShortCode(shortCode);
+        tentativas++;
+        if (tentativas > 5)
+          throw new BadRequestException(
+            'Não foi possível gerar um código único. Tente novamente.',
+          );
+      }
+    } while (!customShortCode && exists);
 
-    // Exemplo: adicionar expiração de 30 dias (opcional)
-    // const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-
-    // Envia apenas os campos permitidos
     const created = await this.urlRepository.create({
       originalUrl,
       shortCode,
-      // expiresAt, // descomente se quiser usar expiração
+      // expiresAt, //
     });
+
     return created;
   }
 
   // Incrementa clicks e retorna a URL original
   async redirectAndCount(shortCode: string) {
-    // Busca a URL pelo código curto
     const url = await this.urlRepository.findByShortCode(shortCode);
     if (!url) throw new NotFoundException('URL não encontrada');
 
-    // Exemplo: checar expiração
+    // Checar expiração (opcional)
     // if (url.expiresAt && url.expiresAt < new Date()) {
     //   throw new BadRequestException('URL expirada');
     // }
 
-    // Incrementa o contador de cliques de forma atômica
+    // Incrementa o contador de cliques
     await this.urlRepository.incrementClicks(url.id);
 
-    // Retorna a URL original para o controller
     return url.originalUrl;
   }
 }
