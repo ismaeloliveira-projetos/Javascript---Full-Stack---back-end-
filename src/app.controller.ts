@@ -26,7 +26,9 @@ export class AppController {
   @Get('urls')
   async getUrls() {
     const urls = await this.appService.getAllUrls();
-    return { total: urls.length, urls };
+
+    //
+    return { urls };
   }
 
   // Encurta a URL
