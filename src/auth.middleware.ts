@@ -9,6 +9,10 @@ import { Request, Response, NextFunction } from 'express';
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
+    if (req.method === 'OPTIONS') {
+      return next();
+    }
+
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
       throw new UnauthorizedException('Token não fornecido');
