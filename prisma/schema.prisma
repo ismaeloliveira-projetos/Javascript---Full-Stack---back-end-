@@ -1,22 +1,18 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL") // variável de ambiente obrigatória
 }
 
 model Url {
   id          Int      @id @default(autoincrement())
   originalUrl String
   shortCode   String   @unique
-  clicks      Int      @default(0) // Requisito: Contador de cliques [cite: 42]
+  clicks      Int      @default(0) // Contador de cliques
   createdAt   DateTime @default(now())
   expiresAt   DateTime? // Data de expiração opcional
 }
