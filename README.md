@@ -101,3 +101,22 @@ npm run start:dev	Modo desenvolvimento
 npm run build	Compila o projeto
 npm run test:e2e	Testes end-to-end
 npm run lint	Analisa código
+
+obs: 
+🔗 Sobre o comprimento dos links
+
+O encurtador gera links curtos usando códigos como eFbFn.
+Exemplo de link completo:
+
+https://shortener-backend-7qu0.onrender.com/redirect/eFbFn
+
+
+⚠️ Observação sobre o tamanho do link:
+
+A parte do código (eFbFn) é realmente curta.
+
+O restante do link (domínio + rota) depende do servidor/host usado.
+
+No Render (ou outros hosts gratuitos), o subdomínio do app é longo, então o link completo ainda ficará relativamente grande.
+
+Para links realmente curtos (s.be/eFbFn, por exemplo), é necessário usar um domínio próprio pago.
