@@ -3,51 +3,64 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
 import { randomBytes } from 'crypto';
+import { UrlRepository } from './repositories/url.repository';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly urlRepository: UrlRepository) {}
 
+  // Busca todas as URLs
   async getAllUrls() {
-    return this.prisma.url.findMany({
-      orderBy: { createdAt: 'desc' },
-    });
+    return this.urlRepository.findAll();
   }
 
-  // Cria e mantem uma URL encurtada
+  // Cria e mantém uma URL encurtada
   async shortenUrl(originalUrl: string) {
-    // validação básica: exigir protocolo http/https
+    // Validação básica: exigir protocolo http/https
     if (!originalUrl || !/^(https?:\/\/)/i.test(originalUrl)) {
       throw new BadRequestException(
         'originalUrl must be provided and start with http:// or https://',
       );
     }
 
-    // cria um shortCode único (6 hex chars)
-    const shortCode = randomBytes(3).toString('hex');
+    // Garante unicidade do shortCode
+    let shortCode: string;
+    let exists = true;
+    let tentativas = 0;
+    do {
+      shortCode = randomBytes(3).toString('hex');
+      exists = await this.urlRepository.existsShortCode(shortCode);
+      tentativas++;
+      if (tentativas > 5) throw new BadRequestException('Não foi possível gerar um código único. Tente novamente.');
+    } while (exists);
 
-    const created = await this.prisma.url.create({
-      data: {
-        originalUrl,
-        shortCode,
-      },
+    // Exemplo: adicionar expiração de 30 dias (opcional)
+    // const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+    const created = await this.urlRepository.create({
+      originalUrl,
+      shortCode,
+      // expiresAt, // descomente se adicionar no schema
     });
-
     return created;
   }
 
   // Incrementa clicks e retorna a URL original
   async redirectAndCount(shortCode: string) {
-    const url = await this.prisma.url.findUnique({ where: { shortCode } });
+    // Busca a URL pelo código curto
+    const url = await this.urlRepository.findByShortCode(shortCode);
     if (!url) throw new NotFoundException('URL não encontrada');
 
-    await this.prisma.url.update({
-      where: { id: url.id },
-      data: { clicks: url.clicks + 1 },
-    });
+    // Exemplo: checar expiração
+    // if (url.expiresAt && url.expiresAt < new Date()) {
+    //   throw new BadRequestException('URL expirada');
+    // }
 
+    // Incrementa o contador de cliques de forma atômica
+    await this.urlRepository.incrementClicks(url.id);
+
+    // Retorna a URL original para o controller
     return url.originalUrl;
   }
 }

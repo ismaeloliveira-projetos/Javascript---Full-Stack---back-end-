@@ -26,9 +26,8 @@ export class AppController {
   @Get('urls')
   async getUrls() {
     const urls = await this.appService.getAllUrls();
-
-    //
-    return { urls };
+    // Retorna também o total de URLs para o front-end
+    return { total: urls.length, urls };
   }
 
   // Encurta a URL

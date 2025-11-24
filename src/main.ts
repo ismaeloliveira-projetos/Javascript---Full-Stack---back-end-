@@ -5,6 +5,9 @@ import 'dotenv/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // Filtro global para tratamento de erros
+  const { AllExceptionsFilter } = await import('./filters/all-exceptions.filter');
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   // 🔥 Validação global
   app.useGlobalPipes(

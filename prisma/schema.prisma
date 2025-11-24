@@ -19,4 +19,5 @@ model Url {
   shortCode   String   @unique
   clicks      Int      @default(0) // Requisito: Contador de cliques [cite: 42]
   createdAt   DateTime @default(now())
+  expiresAt   DateTime? // Data de expiração opcional
 }
